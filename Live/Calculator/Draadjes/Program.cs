@@ -21,7 +21,8 @@ namespace Draadjes
 
             //BerenOpDeWeg();
             //AndereBlokkers();
-            ZakLampenAsync();
+            ReadersAndWriters();
+            //ZakLampenAsync();
 
             Console.WriteLine("Einde");
             Console.ReadLine();
@@ -57,13 +58,62 @@ namespace Draadjes
         private static void AndereBlokkers()
         {
             Barrier b = new Barrier(10);
-            //b.AddParticipant();
-            b.SignalAndWait();
+            Task.Run(() => { 
+            
+                b.SignalAndWait(); // Wait for 10 threads to arrive
+                // then continue
+            });
+         
+            
 
-            CountdownEvent cdev = new CountdownEvent(10);
+            CountdownEvent cdev = new CountdownEvent(10); // We need ten approvals to continue;
 
+            Task.Run(() => {
+                cdev.Signal();
+            });
+
+            cdev.Wait(); // Wait till all 10 tasks sent a signal
+            // Then continue
 
             Semaphore sema = new Semaphore(10, 10);
+        }
+
+
+        private static void ReadersAndWriters()
+        {
+            var rnd = new Random();
+            var rwl = new ReaderWriterLock();
+
+            ThreadPool.SetMinThreads(10, 10);
+            for (var i = 0; i < 10; i++)
+            {
+                ThreadPool.QueueUserWorkItem(Reader, i);
+            }
+
+            void Reader(object nr)
+            {
+                for (var j = 0; j < 10; j++)
+                {
+                    var useTime = rnd.Next(1000, 5000);
+                    Console.WriteLine($"Client {nr} staat voor de reader lock");
+                    rwl.AcquireReaderLock(Timeout.Infinite);
+                    Console.WriteLine($"Client {nr} is reading...");
+                    Thread.Sleep(useTime);
+                    if (useTime > 4000)
+                    {
+                        var cookie = rwl.UpgradeToWriterLock(Timeout.Infinite);
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"Client {nr} is writing...");
+                        Thread.Sleep(rnd.Next(5000, 10000));
+                        Console.WriteLine($"Client {nr} finished writing");
+                        Console.ResetColor();
+                        rwl.DowngradeFromWriterLock(ref cookie);
+                    }
+                    Console.WriteLine($"Client {nr} finished reading");
+                    rwl.ReleaseReaderLock();
+                    Console.WriteLine($"Client {nr} releast de reader lock");
+                }
+            }
         }
 
         static int teller = 0;
