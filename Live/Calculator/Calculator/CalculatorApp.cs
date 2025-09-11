@@ -2,17 +2,25 @@ namespace Calculator;
 
 public partial class CalculatorApp : Form
 {
+    private SynchronizationContext SyncContext;
+
     public CalculatorApp()
     {
         InitializeComponent();
+        SyncContext = SynchronizationContext.Current!;
     }
 
     private void button1_Click(object sender, EventArgs e)
     {
         if (int.TryParse(txtA.Text, out int a) && int.TryParse(txtB.Text, out int b))
         {
-            int result = LongAdd(a, b);
-            UpdateAnswer(result);
+            //int result = LongAdd(a, b);
+            //UpdateAnswer(result);
+
+            Task.Run(() => LongAdd(a, b))
+                .ContinueWith(pt => {
+                     SyncContext.Send(UpdateAnswer, pt.Result);
+                    });
         }
     }
 
