@@ -9,6 +9,7 @@ internal class Program
             c.KomtBijDeParkeerplaat();
         });
 
+        Console.WriteLine("Klaar");
         Console.ReadLine();
     }
 }

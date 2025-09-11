@@ -17,7 +17,7 @@ internal class Car
 
             Console.WriteLine($"De Auto {_kenteken} rijdt de parkeergarage in");
 
-            Task.Delay(10000 + Random.Shared.Next(0, 10000));
+            Task.Delay(10000 + Random.Shared.Next(0, 10000)).Wait();
             Console.WriteLine($"De auto {_kenteken} rijdt eruit");
         });
     }
