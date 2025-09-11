@@ -17,10 +17,88 @@ namespace Draadjes
             //TaskVariant();
             //EnFoutenDan();
             //TeLang();
-            OokWelGeinigAsync();
+            //OokWelGeinigAsync();
+
+            //BerenOpDeWeg();
+            //AndereBlokkers();
+            ZakLampenAsync();
 
             Console.WriteLine("Einde");
             Console.ReadLine();
+        }
+
+        private static async Task ZakLampenAsync()
+        {
+            int a = 0;
+            int b = 0;
+
+            AutoResetEvent zl1 = new AutoResetEvent(false);
+            AutoResetEvent zl2 = new AutoResetEvent(false);
+
+
+            var t1 =Task.Run(() => {
+                Task.Delay(1000).Wait();
+                a = 10;
+                //zl1.Set();
+            });
+
+            var t2 = Task.Run(() => {
+                Task.Delay(2000).Wait();
+                b = 20;
+                //zl2.Set();
+            });
+
+
+            await Task.WhenAll(t1, t2);
+            //WaitHandle.WaitAny(new AutoResetEvent[] { zl1, zl2});
+            Console.WriteLine(a + b);
+        }
+
+        private static void AndereBlokkers()
+        {
+            Barrier b = new Barrier(10);
+            //b.AddParticipant();
+            b.SignalAndWait();
+
+            CountdownEvent cdev = new CountdownEvent(10);
+
+
+            Semaphore sema = new Semaphore(10, 10);
+        }
+
+        static int teller = 0;
+        static object stokje = new object();
+        
+
+        private static void BerenOpDeWeg()
+        {
+            ThreadPool.SetMinThreads(10, 10);
+
+            // Naar kijken
+            Parallel.For(0, 10, idx => {
+             ReaderWriterLock locker = new ReaderWriterLock();
+                locker.AcquireReaderLock(10000);
+               
+                    Console.WriteLine($"Nu bezig: {Thread.CurrentThread.ManagedThreadId}");
+                     locker.UpgradeToWriterLock(1000);
+                        int tmp = teller;
+                        Task.Delay(100).Wait();            
+                        teller = ++tmp;
+                        Console.WriteLine(teller);
+                locker.ReleaseWriterLock();
+               
+                locker.ReleaseLock();
+            });
+            //Parallel.For(0, 10, idx => {
+            //    lock (stokje)
+            //    {
+            //        Console.WriteLine($"Nu bezig: {Thread.CurrentThread.ManagedThreadId}");
+            //        int tmp = teller;
+            //        Task.Delay(100).Wait();
+            //        teller = ++tmp;
+            //        Console.WriteLine(teller);
+            //    }
+            //});
         }
 
         private static async Task OokWelGeinigAsync()

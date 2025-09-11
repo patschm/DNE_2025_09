@@ -10,20 +10,31 @@ public partial class CalculatorApp : Form
         SyncContext = SynchronizationContext.Current!;
     }
 
-    private void button1_Click(object sender, EventArgs e)
+    private async void button1_Click(object sender, EventArgs e)
     {
         if (int.TryParse(txtA.Text, out int a) && int.TryParse(txtB.Text, out int b))
         {
             //int result = LongAdd(a, b);
             //UpdateAnswer(result);
 
-            Task.Run(() => LongAdd(a, b))
-                .ContinueWith(pt => {
-                     SyncContext.Send(UpdateAnswer, pt.Result);
-                    });
+            //Task.Run(() => LongAdd(a, b))
+            //    .ContinueWith(pt => {
+            //         SyncContext.Send(UpdateAnswer, pt.Result);
+            //        });
+
+           // int result = await LongAddAsync(a, b);
+            //UpdateAnswer(result);
+            
+            int result = DoeIets(a, b).Result; // <-- dead lock
+            UpdateAnswer(result);
         }
     }
 
+    private async Task<int> DoeIets(int a, int b)
+    {
+        int resuly = await LongAddAsync(a, b);
+        return resuly;
+    }
   
     private void UpdateAnswer(object? result)
     {
@@ -35,4 +46,8 @@ public partial class CalculatorApp : Form
         Task.Delay(10000).Wait();
         return a + b;
     }
-   }
+    private Task<int> LongAddAsync(int a, int b)
+    {
+       return Task.Run(() => LongAdd(a,b));
+    }
+}
