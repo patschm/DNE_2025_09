@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configuratie", "Configuratie\Configuratie.csproj", "{34023BE0-FA45-4AB8-AD3E-E50CD8AEBB8E}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllInOne", "AllInOne\AllInOne.csproj", "{633F64FC-3D2F-40F2-877B-F6A5749718FD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{3660ABEE-52DD-4815-8221-E0B76675886E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.csproj", "{8ECEA726-2971-412E-837E-A7585F773FE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{3660ABEE-52DD-4815-8221-E0B76675886E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3660ABEE-52DD-4815-8221-E0B76675886E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3660ABEE-52DD-4815-8221-E0B76675886E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8ECEA726-2971-412E-837E-A7585F773FE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8ECEA726-2971-412E-837E-A7585F773FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8ECEA726-2971-412E-837E-A7585F773FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8ECEA726-2971-412E-837E-A7585F773FE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
